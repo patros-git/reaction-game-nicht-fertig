@@ -23,6 +23,7 @@ function richtigGeantwortet (num: number) {
     radio.sendValue("gewinner", siegerID)
     basic.pause(1000)
     basic.setLedColor(0x000000)
+    basic.clearScreen()
 }
 radio.onReceivedNumber(function (receivedNumber) {
     if (rundeAktiv == true && rundeGewonnen == false) {
@@ -36,18 +37,18 @@ function signalAnzeigen () {
             . . # . .
             . # . # .
             . # # # .
-            . # . # .
-            . # . # .
+            # . . . #
+            # . . . #
             `)
     }
     if (aktuelleAufgabe == 2) {
         basic.setLedColor(0xff0000)
         basic.showLeds(`
-            . # # . .
+            . # # # .
             . # . # .
             . # # . .
             . # . # .
-            . # # . .
+            . # # # .
             `)
     }
     if (aktuelleAufgabe == 2) {
@@ -57,7 +58,16 @@ function signalAnzeigen () {
     }
 }
 function falschGeantwortet (num: number) {
-	
+    if (Spieler_ID == 1) {
+        punkteS1 += -1
+    } else if (Spieler_ID == 2) {
+        punkteS2 += -1
+    } else if (Spieler_ID == 3) {
+        punkteS3 += -1
+    } else if (Spieler_ID == 4) {
+        punkteS4 += -1
+    }
+    radio.sendValue("falsch", Spieler_ID)
 }
 function antwortVerarbeiten (num: number) {
     Spieler_ID = Math.idiv(num, 10)

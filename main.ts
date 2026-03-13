@@ -1,3 +1,29 @@
+function richtigGeantwortet (num: number) {
+    let siegerID = 0
+    rundeGewonnen = true
+    if (siegerID == 1) {
+        punkteS1 += 1
+    } else if (siegerID == 2) {
+        punkteS2 += 1
+    } else if (siegerID == 3) {
+        punkteS3 += 1
+    } else if (siegerID == 4) {
+        punkteS4 += 1
+    }
+    basic.setLedColor(0x00ff00)
+    basic.showLeds(`
+        . # # # #
+        # . . . .
+        . # # # .
+        . . . . #
+        # # # # .
+        `)
+    basic.showNumber(siegerID)
+    basic.pause(1500)
+    radio.sendValue("gewinner", siegerID)
+    basic.pause(1000)
+    basic.setLedColor(0x000000)
+}
 radio.onReceivedNumber(function (receivedNumber) {
     if (rundeAktiv == true && rundeGewonnen == false) {
         antwortVerarbeiten(receivedNumber)
@@ -30,8 +56,19 @@ function signalAnzeigen () {
         music.play(music.tonePlayable(880, music.beat(BeatFraction.Whole)), music.PlaybackMode.UntilDone)
     }
 }
-function antwortVerarbeiten (num: number) {
+function falschGeantwortet (num: number) {
 	
+}
+function antwortVerarbeiten (num: number) {
+    Spieler_ID = Math.idiv(num, 10)
+    aktion = num % 10
+    if (Spieler_ID >= 1 && Spieler_ID <= 4) {
+        if (aktion == aktuelleAufgabe) {
+            richtigGeantwortet(Spieler_ID)
+        } else {
+            falschGeantwortet(Spieler_ID)
+        }
+    }
 }
 input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     if (rundeAktiv == false) {
@@ -51,6 +88,8 @@ function rundeStarten () {
         rundeAktiv = false
     }
 }
+let aktion = 0
+let Spieler_ID = 0
 let rundeGewonnen = false
 let rundeAktiv = false
 let aktuelleAufgabe = 0
